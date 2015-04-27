@@ -1,4 +1,4 @@
-package com.fsb.api;
+package de.gymolching.fsb.api;
 
 public interface FSBControllerInterface
 {

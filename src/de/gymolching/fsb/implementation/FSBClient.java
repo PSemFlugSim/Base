@@ -1,4 +1,4 @@
-package com.fsb.implementation;
+package de.gymolching.fsb.implementation;
 
 /**
  * Implements Networking stuff

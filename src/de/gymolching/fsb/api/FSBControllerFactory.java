@@ -1,6 +1,6 @@
-package com.fsb.api;
+package de.gymolching.fsb.api;
 
-import com.fsb.implementation.FSBController;
+import de.gymolching.fsb.implementation.FSBController;
 
 public class FSBControllerFactory
 {

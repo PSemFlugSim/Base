@@ -1,8 +1,8 @@
-package com.fsb.implementation;
+package de.gymolching.fsb.implementation;
 
 import java.util.*;
 
-import com.fsb.api.*;
+import de.gymolching.fsb.api.*;
 
 public class FSBController implements FSBControllerInterface, FSBPositionContainerInterface
 {

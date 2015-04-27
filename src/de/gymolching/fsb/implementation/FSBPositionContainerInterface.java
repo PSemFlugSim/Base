@@ -1,6 +1,6 @@
-package com.fsb.implementation;
+package de.gymolching.fsb.implementation;
 
-import com.fsb.api.Position;
+import de.gymolching.fsb.api.Position;
 
 public interface FSBPositionContainerInterface
 {
