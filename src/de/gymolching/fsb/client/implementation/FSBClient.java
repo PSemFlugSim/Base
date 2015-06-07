@@ -10,16 +10,27 @@ public class FSBClient implements FSBClientInterface
 {
 	private Socket clientSocket = null;
 	private DataOutputStream connOutStream = null;
+	private boolean verbose = false;
+
+	public FSBClient()
+	{
+		this.verbose = false;
+	}
+
+	public FSBClient(boolean verbose)
+	{
+		this.verbose = verbose;
+	}
 
 	public void connect(String host, int port) throws IOException
 	{
-		System.out.println("Establishing connection to Server " + host + ":" + port);
-		this.clientSocket = new Socket(host, port);
+		if (this.verbose)
+			System.out.println("[Client] Establishing connection to Server " + host + ":" + port);
 
-		System.out.println("Fetching DataOutStream");
+		this.clientSocket = new Socket(host, port);
 		this.connOutStream = new DataOutputStream(this.clientSocket.getOutputStream());
 	}
-	
+
 	public void disconnect() throws IOException
 	{
 		this.connOutStream.close();
@@ -30,12 +41,20 @@ public class FSBClient implements FSBClientInterface
 	{
 		if (this.clientSocket != null)
 		{
-			System.out.println("Sending new position data");
+			if (this.verbose)
+				System.out.println("[Client] Sending new position data: " + position.toString());
 			this.connOutStream.writeUTF(position.toString());
 		}
 		else
 		{
-			System.err.println("No connection established. Can NOT send data");
+			System.err
+					.println("[Client] No connection established. Can not send data. Connect to server first by invoking connect()");
 		}
+	}
+
+	@Override
+	public void setVerbose(boolean verbose)
+	{
+		this.verbose = verbose;
 	}
 }

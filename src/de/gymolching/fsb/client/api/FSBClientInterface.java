@@ -36,4 +36,10 @@ public interface FSBClientInterface
 	 */
 	public void sendNewPosition(FSBPosition position) throws IOException;
 
+	/**
+	 * enables or disables verbose client console logging
+	 * 
+	 * @param verbose
+	 */
+	public void setVerbose(boolean verbose);
 }

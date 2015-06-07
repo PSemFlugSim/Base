@@ -9,7 +9,7 @@ public interface FSBServerInterface
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void stopServer() throws InterruptedException;
+	public void stop() throws InterruptedException;
 
 	/**
 	 * returns the most recent received FSBPosition. If no positions are in store, this method will block

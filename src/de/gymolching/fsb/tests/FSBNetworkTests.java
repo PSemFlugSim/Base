@@ -4,43 +4,85 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 
 import de.gymolching.fsb.api.FSBPosition;
 import de.gymolching.fsb.client.implementation.FSBClient;
 import de.gymolching.fsb.server.implementation.FSBServer;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FSBNetworkTests
 {
-	private FSBServer server;
-	private FSBClient client;
-
 	@Test
 	public void testConnect() throws IOException, InterruptedException
 	{
-		this.server = new FSBServer(666);
-		this.client = new FSBClient();
-		this.client.connect("localhost", 666);
-		
-		this.client.disconnect();
-		this.server.stopServer();
+		System.out.println("testConnect()");
+		System.out.println("====================================================================");
+		FSBServer server = new FSBServer(666, true);
+		FSBClient client = new FSBClient(true);
+		client.connect("localhost", 666);
+
+		client.disconnect();
+		server.stop();
+		System.out
+				.println("====================================================================\n\n");
 	}
 
 	@Test
 	public void testSendNewPosition() throws IOException, InterruptedException
 	{
-		this.server = new FSBServer(666);
-		this.client = new FSBClient();
-		this.client.connect("localhost", 666);
-		
+		System.out.println("testSendNewPosition()");
+		System.out.println("====================================================================");
+		FSBServer server = new FSBServer(666, true);
+		FSBClient client = new FSBClient(true);
+		client.connect("localhost", 666);
+
 		FSBPosition testPosition = new FSBPosition(1, 2, 3, 4, 5, 6);
-		this.client.sendNewPosition(testPosition);
-		assertEquals(testPosition, this.server.getMostRecentPositionUpdate());
-		
-		this.client.disconnect();
-		this.server.stopServer();
+		client.sendNewPosition(testPosition);
+		assertEquals(testPosition, server.getMostRecentPositionUpdate());
+		testPosition = new FSBPosition(2, 1, 4, 3, 6, 5);
+		client.sendNewPosition(testPosition);
+		assertEquals(testPosition, server.getMostRecentPositionUpdate());
+
+		client.disconnect();
+		server.stop();
+
+		System.out
+				.println("====================================================================\n\n");
+	}
+
+	@Test
+	public void testDisconnectReconnect() throws IOException, InterruptedException
+	{
+		System.out.println("testDisconnectReconnect()");
+		System.out.println("====================================================================");
+		FSBServer server = new FSBServer(666, true);
+		FSBClient client = new FSBClient(true);
+		client.connect("localhost", 666);
+		client.disconnect();
+		client.connect("localhost", 666);
+		client.disconnect();
+		server.stop();
+
+		System.out
+				.println("====================================================================\n\n");
+	}
+
+	@Test
+	public void testMultipleClientConnect() throws IOException, InterruptedException
+	{
+		System.out.println("testMultipleClientConnect()");
+		System.out.println("====================================================================");
+		FSBServer server = new FSBServer(666, true);
+		FSBClient client = new FSBClient(true);
+		FSBClient client2 = new FSBClient(true);
+		client.connect("localhost", 666);
+		client2.connect("localhost", 666);
+
+		client.disconnect();
+		client2.disconnect();
+		server.stop();
+
+		System.out
+				.println("====================================================================\n\n");
 	}
 }
