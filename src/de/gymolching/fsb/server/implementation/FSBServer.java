@@ -95,7 +95,8 @@ public class FSBServer implements FSBServerInterface, Runnable
 					this.positions.wait();
 				}
 			}
-		} while (shouldWait == true);
+		}
+		while (shouldWait == true);
 
 		synchronized (this.positions)
 		{
@@ -110,30 +111,37 @@ public class FSBServer implements FSBServerInterface, Runnable
 
 	public void run()
 	{
+		// Notify main thread that server is started and waiting to accept connection
+		synchronized (this.positions)
+		{
+			if (this.verbose)
+				System.out.println("[Server] Listening for incoming client connection attempts");
+			this.positions.notifyAll();
+		}
+
 		while (!Thread.interrupted())
 		{
 			// Wait for incoming connection and
 			try
 			{
-				// Notify main thread that server is started and waiting to accept connection
-				synchronized (this.positions)
-				{
-					if (this.verbose)
-						System.out
-								.println("[Server] Listening for incoming client connection attempts");
-					this.positions.notifyAll();
-				}
-
 				Socket connSocket = this.serverSocket.accept();
 				DataInputStream dis = new DataInputStream(connSocket.getInputStream());
 				if (this.verbose)
-					System.out.println("[Server] Client connected " + connSocket.getInetAddress()
-							+ ":" + connSocket.getPort());
+					System.out.println("[Server] Client connected " + connSocket.getInetAddress() + ":" + connSocket.getPort());
 
 				while (connSocket.isConnected())
 				{
 					// Receive Input from client and store it in our positions list
-					String connInputString = dis.readUTF();
+					String connInputString = null;
+					try
+					{
+						connInputString = dis.readUTF();
+					}
+					catch (EOFException e)
+					{
+						e.printStackTrace();
+						break;
+					}
 
 					if (this.verbose)
 						System.out.println("[Server] Received new position: " + connInputString);
@@ -143,27 +151,25 @@ public class FSBServer implements FSBServerInterface, Runnable
 						this.positions.add(new FSBPosition(connInputString));
 						this.positions.notifyAll();
 					}
-
 				}
 
 				if (this.verbose)
-					System.out
-							.println("[Server] Client disconnected. Closing socket and listening for new Connection...");
+					System.out.println("[Server] Client disconnected. Closing socket and listening for new Connection...");
 
 				dis.close();
 				connSocket.close();
 			}
 			catch (IOException e)
-			{} finally
 			{
-
+//				e.printStackTrace();
+				
 				try
 				{
 					this.serverSocket.close();
 				}
-				catch (IOException e)
+				catch (IOException f)
 				{
-					e.printStackTrace();
+					f.printStackTrace();
 				}
 			}
 		}

@@ -17,14 +17,13 @@ public class FSBNetworkTests
 	{
 		System.out.println("testConnect()");
 		System.out.println("====================================================================");
-		FSBServer server = new FSBServer(666, true);
+		FSBServer server = new FSBServer(668, true);
 		FSBClient client = new FSBClient(true);
-		client.connect("localhost", 666);
+		client.connect("localhost", 668);
 
 		client.disconnect();
 		server.stop();
-		System.out
-				.println("====================================================================\n\n");
+		System.out.println("====================================================================\n\n");
 	}
 
 	@Test
@@ -46,8 +45,7 @@ public class FSBNetworkTests
 		client.disconnect();
 		server.stop();
 
-		System.out
-				.println("====================================================================\n\n");
+		System.out.println("====================================================================\n\n");
 	}
 
 	@Test
@@ -55,16 +53,16 @@ public class FSBNetworkTests
 	{
 		System.out.println("testDisconnectReconnect()");
 		System.out.println("====================================================================");
-		FSBServer server = new FSBServer(666, true);
+		FSBServer server = new FSBServer(667, true);
 		FSBClient client = new FSBClient(true);
-		client.connect("localhost", 666);
+		client.connect("localhost", 667);
 		client.disconnect();
-		client.connect("localhost", 666);
+		Thread.sleep(2000);
+		client.connect("localhost", 667);
 		client.disconnect();
 		server.stop();
 
-		System.out
-				.println("====================================================================\n\n");
+		System.out.println("====================================================================\n\n");
 	}
 
 	@Test
@@ -72,17 +70,16 @@ public class FSBNetworkTests
 	{
 		System.out.println("testMultipleClientConnect()");
 		System.out.println("====================================================================");
-		FSBServer server = new FSBServer(666, true);
+		FSBServer server = new FSBServer(669, true);
 		FSBClient client = new FSBClient(true);
 		FSBClient client2 = new FSBClient(true);
-		client.connect("localhost", 666);
-		client2.connect("localhost", 666);
+		client.connect("localhost", 669);
+		client2.connect("localhost", 669);
 
 		client.disconnect();
 		client2.disconnect();
 		server.stop();
 
-		System.out
-				.println("====================================================================\n\n");
+		System.out.println("====================================================================\n\n");
 	}
 }
