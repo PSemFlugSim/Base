@@ -139,7 +139,7 @@ public class FSBServer implements FSBServerInterface, Runnable
 					}
 					catch (EOFException e)
 					{
-						e.printStackTrace();
+//						e.printStackTrace();
 						break;
 					}
 
